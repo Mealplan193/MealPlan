@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Meal Plan</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--sf:#fff;--tint:#f0f8f3;--ink:#12261b;--mu:#587064;--pr:#17744f;--on:#fff;--ac:#dff2e6;--ln:#cfe3d7;--bad:#c23b4e;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Bricolage Grotesque",system-ui,sans-serif}
+main{max-width:880px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:2.4rem;font-weight:800;margin:8px 0 0;letter-spacing:-.03em}h2{font-size:1.15rem;margin:0 0 12px}
+.sub{color:var(--mu);margin:0 0 16px}
+nav{display:flex;gap:6px;margin:12px 0 18px;flex-wrap:wrap}
+nav button{border:1px solid var(--ln);background:var(--sf);color:var(--ink);padding:8px 16px;border-radius:99px;font:inherit;cursor:pointer}
+nav button.on{background:var(--pr);color:var(--on);border-color:var(--pr)}
+.card{background:var(--sf);border:1px solid var(--ln);border-radius:14px;padding:18px;margin-bottom:16px}
+input,select,button{font:inherit;color:var(--ink)}
+input,select{background:var(--tint);border:1px solid var(--ln);border-radius:8px;padding:9px 10px;min-width:0}
+label{display:flex;flex-direction:column;font-size:.85rem;color:var(--mu);gap:4px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:end}.row>label{flex:1 1 110px}
+.btn{background:var(--pr);color:var(--on);border:0;border-radius:8px;padding:10px 18px;cursor:pointer;font-weight:600}
+.btn.alt{background:transparent;color:var(--ink);border:1px solid var(--ln)}
+.hero input#fn{font-size:1.5rem;padding:14px;width:100%;font-weight:600}
+.chip{display:inline-block;background:var(--ac);color:#0f5a3c;border-radius:99px;padding:3px 12px;font-weight:600;font-size:.9rem}
+.live{min-height:34px;margin:10px 0;color:var(--mu)}
+.br{margin:10px 0}.bt{display:flex;justify-content:space-between;font-size:.9rem}
+.tr{height:10px;background:var(--ln);border-radius:9px;overflow:hidden;margin-top:4px}.tr i{display:block;height:100%;background:var(--pr)}.tr i.ov{background:var(--bad)}
+.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:.9rem}th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--ln);white-space:nowrap}th{color:var(--mu);font-weight:600}
+td button{background:none;border:0;color:var(--bad);cursor:pointer}td button.e{color:var(--pr)}
+.msg{color:var(--bad);margin:8px 0 0;min-height:1.2em}.ok{color:var(--pr)}
+.ch{display:flex;flex-wrap:wrap;gap:6px}.ch span{background:var(--tint);border:1px solid var(--ln);border-radius:99px;padding:3px 6px 3px 12px;font-size:.85rem}.ch span b{cursor:pointer;color:var(--bad);padding:0 4px}
+small,footer{color:var(--mu)}footer{margin-top:28px;font-size:.85rem}
+[hidden]{display:none!important}
+.intro{background:var(--pr);color:#fff;border-radius:20px;padding:44px 26px;margin:8px 0 20px}.intro h1{font-size:clamp(2rem,6vw,3.2rem);line-height:1.05;max-width:14ch;margin:0 0 14px}.intro p{max-width:48ch;font-size:1.1rem;margin:0 0 24px}.intro .btn{background:#fff;color:var(--pr);padding:13px 26px;font-size:1.05rem}
+.how{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:16px}.how .card{margin:0}.how h2{color:var(--pr)}.how p{margin:0}
+h1.home{cursor:pointer;color:var(--pr)}
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes pop{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:none}}
+.intro h1{animation:up .7s both}.intro p{animation:up .7s .15s both}.intro .btn{animation:up .7s .3s both}
+.how .card{animation:up .6s .45s both}.how .card:nth-child(2){animation-delay:.6s}.how .card:nth-child(3){animation-delay:.75s}
+#appwrap:not([hidden]){animation:up .5s both}
+.tr i{transform-origin:left;animation:grow .8s ease-out}
+.chip{animation:pop .3s ease-out}
+.btn{transition:transform .15s,box-shadow .15s}.btn:hover{transform:translateY(-2px);box-shadow:0 6px 14px rgba(0,0,0,.2)}.btn:active{transform:none}
+nav button{transition:background .2s,color .2s}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body><main>
+<div id="intro"><section class="intro"><h1>Know what you eat, one food at a time.</h1><p>Meal Plan sorts every food you log into a food group and counts its calories, protein, carbs and fat against your daily goals.</p><button class="btn" onclick="start()">Start tracking</button></section>
+<div class="how"><div class="card"><h2>Log a food</h2><p class="sub">Choose a food from the list and enter how many servings you had.</p></div><div class="card"><h2>Get its group</h2><p class="sub">A text classifier trained in your browser assigns the food group for you.</p></div><div class="card"><h2>Track your goals</h2><p class="sub">Set targets yourself or estimate them, then watch your daily totals fill in.</p></div></div></div>
+<div id="appwrap" hidden><h1 class="home" onclick="home()" title="Back to intro">Meal Plan</h1><p class="sub">Log a food. We sort it into a food group and count the nutrients.</p>
+<nav id="nav"></nav><div id="app"></div></div>
+<footer>Prototype. Your data stays in this browser and is lost if you clear it. The food table holds approximate values, and the classifier has only been checked on the foods it was trained on. Not medical advice.</footer>
+</main>
+<script>
+const D={"Fruits":"apple|1 medium|95|.5|25|.3;banana|1 medium|105|1.3|27|.4;orange|1 medium|62|1.2|15|.2;mango|1 cup|99|1.4|25|.6;grapes|1 cup|104|1.1|27|.2;strawberries|1 cup|49|1|12|.5;blueberries|1 cup|84|1.1|21|.5;watermelon|1 cup|46|.9|11.5|.2;pineapple|1 cup|82|.9|22|.2;pear|1 medium|101|.6|27|.2;papaya|1 cup|62|.7|16|.4;avocado|1 medium|240|3|13|22;kiwi|1 medium|42|.8|10|.4",
+"Vegetables":"broccoli|1 cup|55|3.7|11|.6;carrot|1 medium|25|.6|6|.1;spinach|1 cup|7|.9|1|.1;tomato|1 medium|22|1.1|4.8|.2;cucumber|1 cup|16|.7|3.8|.1;lettuce|1 cup|5|.5|1|.1;cabbage|1 cup|22|1.1|5|.1;kale|1 cup|33|2.9|6|.6;bell pepper|1 medium|31|1|7|.3;onion|1 medium|44|1.2|10|.1;sweet potato|1 medium|112|2|26|.1;corn|1 cup|143|5|31|2;green beans|1 cup|31|1.8|7|.2;eggplant|1 cup|20|.8|5|.2",
+"Desserts":"chocolate cake|1 slice|352|5|51|14;ice cream|1 cup|273|4.6|31|14;chocolate bar|1 bar|235|3|26|13;apple pie|1 slice|296|2|43|14;cheesecake|1 slice|321|5.5|26|23;brownie|1 piece|227|3|36|9;cookie|1 piece|78|1|10|4;donut|1 piece|250|3|31|13;pudding|1 cup|150|4|27|3;leche flan|1 slice|180|5|28|6;halo-halo|1 cup|290|5|58|5",
+"Protein":"chicken breast|1 piece|165|31|0|3.6;egg|1 large|72|6.3|.4|4.8;salmon|1 fillet|206|22|0|12;tuna|1 can|120|26|0|1;beef steak|1 piece|271|26|0|18;pork chop|1 piece|231|24|0|14;shrimp|1 cup|140|27|1|2;tofu|1 cup|188|20|4|11;tilapia|1 fillet|128|26|0|2.7;lentils|1 cup|230|18|40|.8;black beans|1 cup|227|15|41|.9;ground beef|1 cup|290|24|0|21;turkey breast|1 slice|30|6|0|.4;bacon|1 slice|43|3|.1|3.3;sardines|1 can|191|23|0|11",
+"Grains and carbs":"white rice|1 cup|205|4.3|45|.4;brown rice|1 cup|216|5|45|1.8;bread|1 slice|79|2.7|15|1;oatmeal|1 cup|166|6|28|3.6;pasta|1 cup|220|8|43|1.3;noodles|1 cup|221|7|40|3;tortilla|1 piece|140|3.5|24|3;potato|1 medium|161|4.3|37|.2;quinoa|1 cup|222|8|39|3.6;cornflakes|1 cup|100|2|24|.2;pancake|1 piece|90|2.5|13|3;bagel|1 piece|277|11|54|1.4;pandesal|1 piece|85|2.5|16|1;crackers|5 pieces|80|1.5|14|2;baguette|1 slice|70|2.5|14|.8;couscous|1 cup|176|6|36|.3",
+"Dairy":"whole milk|1 cup|149|8|12|8;cheddar cheese|1 slice|113|7|.4|9;yogurt|1 cup|149|8.5|11.4|8;mozzarella|1 oz|85|6|1|6;cottage cheese|1 cup|206|25|8|9;skim milk|1 cup|83|8|12|.2",
+"Nuts and seeds":"almonds|1 oz|164|6|6|14;peanuts|1 oz|161|7|4.6|14;cashews|1 oz|157|5|9|12;walnuts|1 oz|185|4.3|3.9|18;chia seeds|1 tbsp|58|2|5|3.7;sunflower seeds|1 oz|165|5.5|6.8|14",
+"Fats and oils":"olive oil|1 tbsp|119|0|0|13.5;butter|1 tbsp|102|.1|0|11.5;coconut oil|1 tbsp|121|0|0|13.5;mayonnaise|1 tbsp|94|.1|.1|10;margarine|1 tbsp|101|.1|0|11.4",
+"Beverages":"orange juice|1 cup|112|1.7|26|.5;cola|1 can|140|0|39|0;coffee|1 cup|2|.3|0|0;green tea|1 cup|2|0|0|0;sports drink|1 bottle|80|0|21|0",
+"Snacks":"potato chips|1 oz|152|2|15|10;popcorn|1 cup|31|1|6|.4;pretzels|1 oz|108|3|23|1;granola bar|1 bar|120|2|19|4"};
+const $=s=>document.querySelector(s),r=x=>Math.round(x*10)/10;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const today=()=>{const d=new Date();return new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10)};
+const defaults=()=>Object.entries(D).flatMap(([g,t])=>t.split(';').map(l=>{const a=l.split('|');return{n:a[0],m:a[1],c:+a[2],p:+a[3],b:+a[4],f:+a[5],g}}));
+let S={foods:[],entries:[],goals:{c:2000,p:100,b:250,f:67},prof:{sex:'m',age:25,w:65,h:170,act:1.375},ideas:true,date:today(),tab:'today',filter:'',edit:null,msg:''};
+try{const j=JSON.parse(localStorage.getItem('mealplan')||'null');if(j)Object.assign(S,j)}catch(e){}
+if(!S.foods||!S.foods.length)S.foods=defaults();
+const save=()=>{try{localStorage.setItem('mealplan',JSON.stringify({foods:S.foods,entries:S.entries,goals:S.goals,prof:S.prof,ideas:S.ideas}))}catch(e){}};
+/* TF-IDF + multinomial logistic regression, trained in the browser */
+let M=null;
+const tok=s=>{const w=s.toLowerCase().match(/[a-z0-9]+/g)||[];return w.concat(w.slice(1).map((x,i)=>w[i]+' '+x))};
+function vec(d){if(!M)return[];const c={};d.forEach(t=>{if(t in M.V)c[M.V[t]]=(c[M.V[t]]||0)+1});let n=0;const x=Object.entries(c).map(([j,k])=>{const v=k*M.idf[j];n+=v*v;return[+j,v]});n=Math.sqrt(n)||1;return x.map(([j,v])=>[j,v/n])}
+function soft(x){const z=M.cls.map((_,k)=>{let s=M.B[k];for(const[j,v]of x)s+=M.W[k][j]*v;return s}),m=Math.max(...z),e=z.map(v=>Math.exp(v-m)),t=e.reduce((a,b)=>a+b,0);return e.map(v=>v/t)}
+function train(){
+ if(!S.foods.length){M=null;return}
+ const docs=S.foods.map(f=>tok(f.n)),cls=[...new Set(S.foods.map(f=>f.g))],df={},V={};
+ docs.forEach(d=>new Set(d).forEach(t=>df[t]=(df[t]||0)+1));
+ const T=Object.keys(df);T.forEach((t,i)=>V[t]=i);
+ const N=docs.length,nf=T.length,K=cls.length;
+ M={V,idf:T.map(t=>Math.log((1+N)/(1+df[t]))+1),cls,W:cls.map(()=>new Float64Array(nf)),B:new Float64Array(K)};
+ const X=docs.map(vec),Y=S.foods.map(f=>cls.indexOf(f.g));
+ for(let e=0;e<1500;e++){
+  const gW=cls.map(()=>new Float64Array(nf)),gB=new Float64Array(K);
+  X.forEach((x,i)=>{const p=soft(x);p[Y[i]]-=1;for(let k=0;k<K;k++){gB[k]+=p[k];for(const[j,v]of x)gW[k][j]+=p[k]*v}});
+  for(let k=0;k<K;k++){M.B[k]-=3*gB[k]/N;for(let j=0;j<nf;j++)M.W[k][j]-=3*(gW[k][j]/N+1e-4*M.W[k][j])}
+ }
+}
+function predict(name){const x=vec(tok(name));if(!x.length)return null;const p=soft(x);let k=p.indexOf(Math.max(...p));return{g:M.cls[k],p:p[k]}}
+const acc=()=>S.foods.filter(f=>{const p=predict(f.n);return p&&p.g===f.g}).length;
+train();
+/* helpers */
+const groups=()=>[...new Set(S.foods.map(f=>f.g))];
+const dayE=d=>S.entries.filter(e=>e.d===d);
+const sum=(a,k)=>a.reduce((s,e)=>s+e[k],0);
+const bar=(l,v,g,u)=>`<div class="br"><div class="bt"><span>${l}</span><b>${r(v)} of ${r(g)} ${u}</b></div><div class="tr"><i style="width:${Math.min(100,g?v/g*100:0)}%" class="${v>g?'ov':''}"></i></div></div>`;
+const find=n=>S.foods.find(f=>f.n===n.trim().toLowerCase());
+function ideas(){
+ const es=dayE(S.date),g=S.goals,rem={c:g.c-sum(es,'c'),p:g.p-sum(es,'p'),b:g.b-sum(es,'b'),f:g.f-sum(es,'f')};
+ const k=['p','b','f'].reduce((a,b)=>rem[b]>rem[a]?b:a,'p');
+ if(rem.c<=0||rem[k]<=0)return{rem,k,list:[]};
+ return{rem,k,list:S.foods.filter(f=>f.c<=rem.c).sort((a,b)=>b[k]-a[k]).slice(0,5)}
+}
+/* views */
+function viewToday(){
+ const es=dayE(S.date),g=S.goals,fl=S.filter;
+ const gr={};es.forEach(e=>gr[e.fc]=(gr[e.fc]||0)+e.c);
+ const rows=es.filter(e=>!fl||e.fc===fl).map(e=>`<tr><td>${esc(e.n)}</td><td>${e.q} × ${esc(e.m)}</td><td>${r(e.c)}</td><td>${r(e.p)}</td><td>${r(e.b)}</td><td>${r(e.f)}</td><td><select onchange="fix(${e.id},this.value)">${groups().concat(groups().includes(e.fc)?[]:[e.fc]).map(x=>`<option${x===e.fc?' selected':''}>${esc(x)}</option>`).join('')}</select></td><td><button onclick="del(${e.id})">Delete</button></td></tr>`).join('');
+ const id=ideas(),kn={p:'protein',b:'carbs',f:'fat'}[id.k];
+ return`<div class="card hero"><h2>What did you eat?</h2>
+ <input id="fn" list="fl" placeholder="Start typing a food, such as banana" autocomplete="off" oninput="live()">
+ <datalist id="fl">${S.foods.map(f=>`<option value="${esc(f.n)}">`).join('')}</datalist>
+ <div class="live" id="lv">Pick a food from the list to see its food group.</div>
+ <div class="row"><label>Servings<input id="fq" type="number" min="0.25" step="0.25" value="1"></label><label>Date<input type="date" value="${S.date}" onchange="S.date=this.value||today();render()"></label><button class="btn" onclick="add()">Add to log</button></div><div class="msg" id="lm"></div></div>
+ <div class="card"><h2>Daily totals</h2>${bar('Calories',sum(es,'c'),g.c,'kcal')}${bar('Protein',sum(es,'p'),g.p,'g')}${bar('Carbohydrates',sum(es,'b'),g.b,'g')}${bar('Fat',sum(es,'f'),g.f,'g')}
+ <h2 style="margin-top:20px">Calories by food group</h2>${Object.keys(gr).length?Object.entries(gr).map(([k,v])=>bar(esc(k),v,sum(es,'c'),'kcal')).join(''):'<small>Nothing logged for this day yet.</small>'}</div>
+ <div class="card"><div class="row"><h2 style="flex:1">Entries</h2><label style="flex:0 0 190px">Show group<select onchange="S.filter=this.value;render()"><option value="">All groups</option>${groups().map(x=>`<option${x===fl?' selected':''}>${esc(x)}</option>`).join('')}</select></label></div>
+ ${rows?`<div class="tw"><table><tr><th>Food</th><th>Amount</th><th>kcal</th><th>Protein</th><th>Carbs</th><th>Fat</th><th>Group</th><th></th></tr>${rows}</table></div><small>Change the group if the prediction is wrong.</small>`:'<small>No entries to show.</small>'}</div>
+ <div class="card"><div class="row"><h2 style="flex:1">Food ideas</h2><button class="btn alt" onclick="S.ideas=!S.ideas;save();render()">${S.ideas?'Turn off':'Turn on'}</button></div>
+ ${!S.ideas?'<small>Food ideas are off.</small>':S.date!==today()?'<small>Ideas are shown for today only.</small>':id.list.length?`<p class="sub">Biggest gap is ${kn} (${r(id.rem[id.k])} g left). Foods that fit your remaining ${r(id.rem.c)} kcal, ranked by ${kn}:</p><div class="ch">${id.list.map(f=>`<span>${esc(f.n)}, ${esc(f.m)} <small>(${r(f[id.k])} g ${kn})</small></span>`).join('')}</div>`:'<small>No ideas right now. Your calorie goal or biggest gap is already met.</small>'}</div>`
+}
+function viewGoals(){const g=S.goals,p=S.prof,o=(v,t)=>`<option value="${v}"${+p.act===v?' selected':''}>${t}</option>`;
+ return`<div class="card"><h2>Daily goals</h2><div class="row"><label>Calories (kcal)<input id="gc" type="number" min="0" value="${r(g.c)}"></label><label>Protein (g)<input id="gp" type="number" min="0" value="${r(g.p)}"></label><label>Carbohydrates (g)<input id="gb" type="number" min="0" value="${r(g.b)}"></label><label>Fat (g)<input id="gf" type="number" min="0" value="${r(g.f)}"></label></div><p><button class="btn" onclick="saveGoals()">Save goals</button></p><div class="msg ok" id="gm">${S.msg}</div></div>
+ <div class="card"><h2>Estimate goals from your profile</h2><p class="sub">Uses the Mifflin-St Jeor equation, split 20% protein, 50% carbohydrates, 30% fat. You can edit every value above afterwards. This is a general estimate, not medical advice.</p>
+ <div class="row"><label>Gender<select id="ps"><option value="m"${p.sex==='m'?' selected':''}>Male</option><option value="f"${p.sex==='f'?' selected':''}>Female</option></select></label><label>Age<input id="pa" type="number" min="1" value="${p.age}"></label><label>Weight (kg)<input id="pw" type="number" min="1" value="${p.w}"></label><label>Height (cm)<input id="ph" type="number" min="1" value="${p.h}"></label><label>Activity<select id="pc">${o(1.2,'Sedentary')}${o(1.375,'Light')}${o(1.55,'Moderate')}${o(1.725,'Very active')}</select></label></div>
+ <p><button class="btn" onclick="estimate()">Estimate and save</button></p></div>`}
+function viewFoods(){const e=S.edit!==null?S.foods[S.edit]:{n:'',m:'',c:'',p:'',b:'',f:'',g:''},n=(i,l,v)=>`<label>${l}<input id="${i}" type="number" min="0" step="any" value="${v}"></label>`;
+ return`<div class="card"><h2>${S.edit!==null?'Edit food':'Add a food'}</h2><div class="row"><label style="flex:2 1 160px">Name<input id="xn" value="${esc(e.n)}"></label><label>Measure<input id="xm" value="${esc(e.m)}" placeholder="1 cup"></label>${n('xc','Calories',e.c)}${n('xp','Protein (g)',e.p)}${n('xb','Carbs (g)',e.b)}${n('xf','Fat (g)',e.f)}<label style="flex:2 1 160px">Food group<input id="xg" list="gl" value="${esc(e.g)}"></label><datalist id="gl">${groups().map(x=>`<option value="${esc(x)}">`).join('')}</datalist></div>
+ <p><button class="btn" onclick="saveFood()">${S.edit!==null?'Save changes':'Add food'}</button> ${S.edit!==null?'<button class="btn alt" onclick="S.edit=null;render()">Cancel</button>':''}</p><div class="msg" id="xmsg">${S.msg}</div>
+ <small>Nutrient values are for one measure. The classifier retrains every time the list changes. Training accuracy: ${acc()} of ${S.foods.length} foods correct.</small></div>
+ <div class="card"><h2>Food groups</h2><div class="ch">${groups().map(x=>`<span>${esc(x)}<b onclick="delGroup(${JSON.stringify(x).replace(/"/g,'&quot;')})" title="Delete group and its foods">×</b></span>`).join('')}</div></div>
+ <div class="card"><div class="row"><h2 style="flex:1">All foods (${S.foods.length})</h2><button class="btn alt" onclick="S.foods=defaults();S.edit=null;train();save();render()">Reset to built-in list</button></div><div class="tw"><table><tr><th>Food</th><th>Measure</th><th>kcal</th><th>P</th><th>C</th><th>F</th><th>Group</th><th></th></tr>${S.foods.map((f,i)=>`<tr><td>${esc(f.n)}</td><td>${esc(f.m)}</td><td>${f.c}</td><td>${f.p}</td><td>${f.b}</td><td>${f.f}</td><td>${esc(f.g)}</td><td><button class="e" onclick="S.edit=${i};S.msg='';render();scrollTo(0,0)">Edit</button><button onclick="delFood(${i})">Delete</button></td></tr>`).join('')}</table></div></div>`}
+function render(){
+ $('#nav').innerHTML=[['today','Today'],['goals','Goals'],['foods','Food list']].map(([k,t])=>`<button class="${S.tab===k?'on':''}" onclick="S.tab='${k}';S.msg='';render()">${t}</button>`).join('');
+ $('#app').innerHTML=S.tab==='today'?viewToday():S.tab==='goals'?viewGoals():viewFoods();
+}
+/* actions */
+function live(){const f=find($('#fn').value),el=$('#lv');if(!f){el.textContent='Pick a food from the list to see its food group.';return}const p=predict(f.n);el.innerHTML=`Classified as <span class="chip">${esc(p?p.g:f.g)}</span> ${p?`<small>(${Math.round(p.p*100)}% confidence)</small>`:''} <small>Nutrients are for ${esc(f.m)}.</small>`}
+function add(){const f=find($('#fn').value),q=parseFloat($('#fq').value);
+ if(!f){$('#lm').textContent='Choose a food from the list. Foods that are not on it cannot be logged. Add them on the Food list page.';return}
+ if(!(q>0)){$('#lm').textContent='Enter a serving amount greater than 0.';return}
+ const p=predict(f.n),c=p?p.g:f.g;
+ S.entries.push({id:Date.now()+Math.random(),d:S.date,n:f.n,m:f.m,q,pc:c,fc:c,c:f.c*q,p:f.p*q,b:f.b*q,f:f.f*q});save();render()}
+const fix=(id,g)=>{const e=S.entries.find(x=>x.id===id);if(e){e.fc=g;save();render()}};
+const del=id=>{S.entries=S.entries.filter(x=>x.id!==id);save();render()};
+function saveGoals(){const v=i=>Math.max(0,parseFloat($(i).value)||0);S.goals={c:v('#gc'),p:v('#gp'),b:v('#gb'),f:v('#gf')};save();S.msg='Goals saved.';render()}
+function estimate(){const w=parseFloat($('#pw').value),h=parseFloat($('#ph').value),a=parseFloat($('#pa').value),sx=$('#ps').value,ac=+$('#pc').value;
+ if(!(w>0&&h>0&&a>0)){$('#gm').textContent='Enter your age, weight and height.';$('#gm').className='msg';return}
+ S.prof={sex:sx,age:a,w,h,act:ac};const c=(10*w+6.25*h-5*a+(sx==='m'?5:-161))*ac;
+ S.goals={c:Math.round(c),p:Math.round(c*.2/4),b:Math.round(c*.5/4),f:Math.round(c*.3/9)};save();S.msg='Goals estimated and saved. Edit any value above.';render()}
+function saveFood(){const n=$('#xn').value.trim().toLowerCase(),m=$('#xm').value.trim(),g=$('#xg').value.trim(),v=['#xc','#xp','#xb','#xf'].map(i=>$(i).value===''?NaN:+$(i).value);
+ const bad=/[<>&"]/;let err='';
+ if(!n||!m||!g)err='Fill in the name, measure and food group.';
+ else if(bad.test(n+m+g))err='Names cannot contain < > & or double quotes.';
+ else if(v.some(x=>!(x>=0)))err='Nutrient values must be numbers that are 0 or more.';
+ else if(S.foods.some((f,i)=>f.n===n&&i!==S.edit))err='That food is already in the list.';
+ if(err){S.msg=err;$('#xmsg').textContent=err;return}
+ const o={n,m,c:v[0],p:v[1],b:v[2],f:v[3],g};
+ if(S.edit!==null){const old=S.foods[S.edit].n;S.foods[S.edit]=o;S.entries.forEach(e=>{if(e.n===old&&old!==n)e.n=n})}else S.foods.push(o);
+ S.edit=null;S.msg='';train();save();render()}
+function delFood(i){S.foods.splice(i,1);S.edit=null;train();save();render()}
+function delGroup(g){S.foods=S.foods.filter(f=>f.g!==g);S.edit=null;train();save();render()}
+const start=()=>{$('#intro').hidden=true;$('#appwrap').hidden=false;scrollTo(0,0)},home=()=>{$('#intro').hidden=false;$('#appwrap').hidden=true;scrollTo(0,0)};
+render();
+</script></body></html>
